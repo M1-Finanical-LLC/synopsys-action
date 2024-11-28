@@ -1,11 +1,10 @@
-name: Release new action version
+name: action version 1.0
 on:
   workflow_dispatch:
     inputs:
       TAG_NAME:
-        description: 'Bump Version'
-        required: true
-
+        description: Version'
+      root = true
 env:
   TAG_NAME: ${{ github.event.inputs.TAG_NAME || github.event.release.tag_name }}
 permissions:
@@ -22,15 +21,13 @@ jobs:
         with:
           node-version: 18.x
       - name: setup git config
-        run: |
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
+        
       - name: Update the version
-        run: |
+        run: 
           echo ${{ env.TAG_NAME }}
+         
           npm ci
           npm version ${{ env.TAG_NAME }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
-          path: dist/*.js*
+          path: %TARGET%
